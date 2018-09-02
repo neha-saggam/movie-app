@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { predicateBy } from '../utils/common';
 
-const URL =`http://starlord.hackerearth.com/movieslisting`;
+const URL = `/data/movies.json`;
 
 
 export function getMovies() {
-  const request = axios.get(URL);
       return function(dispatch) {
         axios.get(URL)
       .then((response) => {
@@ -22,7 +21,7 @@ export function getMovies() {
 function getUniqueAttributeArray(movies, filterBy) {
   let uniqueArray = [];
   for(let i = 0; i< movies.length; i++){
-    if(movies[i][filterBy].length != 0 && uniqueArray.indexOf(movies[i][filterBy]) === -1){
+    if(movies[i][filterBy].length !== 0 && uniqueArray.indexOf(movies[i][filterBy]) === -1){
       uniqueArray.push(movies[i][filterBy]);
     }
   }
@@ -68,7 +67,7 @@ export function searchMovie(searchText) {
     console.log("Search");
     let updatedMovies = [];
     for(let i=0; i<movies.length; i++) {
-      if(movies[i].movie_title.trim().toUpperCase() == searchText.trim().toUpperCase()) {
+      if(movies[i].movie_title.trim().toUpperCase() === searchText.trim().toUpperCase()) {
           updatedMovies = movies.slice(i, i+1);
       }
     }

@@ -1,6 +1,6 @@
 import React from "react";
 import MovieTable from './Table';
-import {ControlLabel, FormControl, Row, Grid, Col, FormGroup, Checkbox} from 'react-bootstrap';
+import {FormControl, Row, Grid, Col} from 'react-bootstrap';
 
 export default class List extends React.Component {
 
@@ -48,24 +48,17 @@ export default class List extends React.Component {
     this.setState({isInit: false});
   }
 
-  // handleFilterChange(e) {
-  //   console.log("e", e.target.value);
-  //   this.setState({filterBy: e.target.value});
-  // }
-
   searchMovie(event) {
-    if(event.key == 'Enter') {
+    if(event.key === 'Enter') {
       this.props.searchMovie(this.state.searchText);
     }
   }
 
   handleLanguageChange(e) {
-    console.log("e: ", e.target.value);
     this.props.filterByLanguage(e.target.value);
   }
 
   handleCountryChange(e) {
-    console.log("e: ", e.target.value);
   this.props.filterByCountry(e.target.value);
   }
 

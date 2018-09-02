@@ -1,6 +1,6 @@
 export function predicateBy(prop){
    return function(a,b){
-     if(a[prop].length != 0 && b[prop].length != 0) {
+     if(a[prop].length !== 0 && b[prop].length !== 0) {
        if( a[prop] > b[prop]){
            return 1;
        }else if( a[prop] < b[prop] ){
