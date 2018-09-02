@@ -9,7 +9,9 @@ export function getMovies() {
       return function(dispatch) {
         axios.get(URL)
       .then((response) => {
-        dispatch(getMovieSuccess(response.data))
+        dispatch(getMovieSuccess(response.data));
+        dispatch(getLanguages(response.data));
+        dispatch(getCountries(response.data));
       })
       .catch((err) => {
         dispatch(getMovieFailure(err))
@@ -17,6 +19,34 @@ export function getMovies() {
   }
 };
 
+function getUniqueAttributeArray(movies, filterBy) {
+  let uniqueArray = [];
+  for(let i = 0; i< movies.length; i++){
+    if(movies[i][filterBy].length != 0 && uniqueArray.indexOf(movies[i][filterBy]) === -1){
+      uniqueArray.push(movies[i][filterBy]);
+    }
+  }
+  return uniqueArray;
+}
+
+function getLanguages(movies) {
+  // movies.map(item => item.language)
+  //   .filter((value, index, self) => self.indexOf(value) === index)
+  //   console.log("languages: ", movies);
+    let uniqueLanguages = getUniqueAttributeArray(movies, "language");
+    return {
+      type: 'FETCH_LANGUAGES_SUCCESSFUL',
+      payload: uniqueLanguages
+    }
+}
+
+function getCountries(movies) {
+    let uniqueCountries = getUniqueAttributeArray(movies, "country");
+    return {
+      type: 'FETCH_COUNTRIES_SUCCESSFUL',
+      payload: uniqueCountries
+    }
+}
 
 function getMovieSuccess(response) {
   return {
@@ -58,5 +88,27 @@ export function sortByTitleYear(sortOrder, sortBy) {
       console.log("updatedMovies.title_year: ", typeof(updatedMovies[i].title_year));
     }
     dispatch(getMovieSuccess(updatedMovies));
+  }
+}
+
+function filter(movies, filterValue, filterKey) {
+  let updatedMovies = movies.filter(val => {
+    return val[filterKey] === filterValue;
+  });
+
+  return updatedMovies;
+}
+
+export function filterByCountry(country) {
+  return (dispatch, getState) => {
+    const {movies} = getState().movieReducer;
+    dispatch(getMovieSuccess(filter(movies, country, "country")));
+  }
+}
+
+export function filterByLanguage(language) {
+  return (dispatch, getState) => {
+    const {movies} = getState().movieReducer;
+    dispatch(getMovieSuccess(filter(movies, language, "language")));
   }
 }

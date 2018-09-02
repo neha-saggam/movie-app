@@ -1,6 +1,6 @@
 import React from "react";
 import MovieTable from './Table';
-import {ControlLabel, FormControl, Row, Grid, Col} from 'react-bootstrap';
+import {ControlLabel, FormControl, Row, Grid, Col, FormGroup, Checkbox} from 'react-bootstrap';
 
 export default class List extends React.Component {
 
@@ -11,35 +11,62 @@ export default class List extends React.Component {
       mode: "",
       errors: {},
       searchText: "",
-      sortOrder: "ASC"
+      sortOrder: "ASC",
+      filterByOptions: [
+        "Select",
+        "Language",
+        "Country"
+      ],
+      languages: [],
+      countries: [],
+      isInit: true,
+      filterBy: ""
     }
     this.handleSearhTextChange = this.handleSearhTextChange.bind(this);
     this.searchMovie = this.searchMovie.bind(this);
     this.sortByTitleYear = this.sortByTitleYear.bind(this);
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+    this.handleCountryChange = this.handleCountryChange.bind(this);
+    // this.handleFilterChange = this.handleFilterChange.bind(this);
   }
 
   componentDidMount() {
-    console.log("this.props: ", this.props);
     this.props.getMovies();
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("nextProps: ", nextProps);
-    this.setState({movies: nextProps.movies})
+    this.setState({movies: nextProps.movies});
+    this.setState({languages: nextProps.languages});
+    this.setState({countries: nextProps.countries});
   }
 
   handleSearhTextChange(e) {
-    console.log(e.target.value);
     this.setState({searchText: e.target.value});
-    if(e.target.value.length === 0) {
+    if(e.target.value.length === 0 && !this.state.isInit) {
       this.props.getMovies();
     }
+    this.setState({isInit: false});
   }
+
+  // handleFilterChange(e) {
+  //   console.log("e", e.target.value);
+  //   this.setState({filterBy: e.target.value});
+  // }
 
   searchMovie(event) {
     if(event.key == 'Enter') {
       this.props.searchMovie(this.state.searchText);
     }
+  }
+
+  handleLanguageChange(e) {
+    console.log("e: ", e.target.value);
+    this.props.filterByLanguage(e.target.value);
+  }
+
+  handleCountryChange(e) {
+    console.log("e: ", e.target.value);
+  this.props.filterByCountry(e.target.value);
   }
 
   sortByTitleYear(sortBy) {
@@ -54,19 +81,44 @@ export default class List extends React.Component {
   }
 
 render() {
-  console.log("errors: ", this.state.errors);
   return (
     <div>
     <Grid>
     <Row className="show-grid">
-      <Col  xsOffset={6} xs={6} md={3}>
-      <FormControl componentClass="select" placeholder="select">
-      <option value="select">select</option>
-      <option value="other">Language</option>
-      <option value="other">Country</option>
-        </FormControl>
-      </Col>
+    <Col xs={3} md={3}>
+    <FormControl componentClass="select" placeholder="Type" onChange={(e) => this.setState({filterBy: e.target.value})}>
+    {
+       this.state.filterByOptions.map((option, index) => {
+          return (<option key={index} value={option}>{option}</option>)
+       })
+    }
+    </FormControl>
+    </Col>
+    {this.state.filterBy === "Language"
+      &&
       <Col xs={6} md={3}>
+      <FormControl componentClass="select" placeholder="Type" onChange={this.handleLanguageChange}>
+      {
+        this.state.languages.map((option, index) => {
+          return (<option key={index} value={option}>{option}</option>)
+        })
+      }
+      </FormControl>
+    </Col>
+    }
+    {this.state.filterBy === "Country"
+     &&
+     <Col xs={6} md={3}>
+     <FormControl componentClass="select" placeholder="Type" onChange={this.handleCountryChange}>
+     {
+       this.state.countries.map((option, index) => {
+        return (<option key={index} value={option}>{option}</option>)
+      })
+    }
+</FormControl>
+    </Col> }
+
+      <Col xsOffset={6} xs={6} md={3}>
       <FormControl
         type="text"
         value={this.state.value}
