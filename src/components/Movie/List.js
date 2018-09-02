@@ -85,7 +85,7 @@ render() {
     <div>
     <Grid>
     <Row className="show-grid">
-    <Col xs={3} md={3}>
+    <Col xs={3} md={2}>
     <FormControl componentClass="select" placeholder="Type" onChange={(e) => this.setState({filterBy: e.target.value})}>
     {
        this.state.filterByOptions.map((option, index) => {
@@ -96,7 +96,7 @@ render() {
     </Col>
     {this.state.filterBy === "Language"
       &&
-      <Col xs={6} md={3}>
+      <Col xs={6} md={2}>
       <FormControl componentClass="select" placeholder="Type" onChange={this.handleLanguageChange}>
       {
         this.state.languages.map((option, index) => {
@@ -118,7 +118,7 @@ render() {
 </FormControl>
     </Col> }
 
-      <Col xsOffset={6} xs={6} md={3}>
+      <Col xsOffset={7} xs={6} md={3}>
       <FormControl
         type="text"
         value={this.state.value}
