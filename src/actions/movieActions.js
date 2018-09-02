@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { predicateBy } from '../utils/common';
 
-const URL = `/data/movies.json`;
+const URL = `https://raw.githubusercontent.com/neha-saggam/movie-app/master/public/data/movies.json`;
 
 
 export function getMovies() {
